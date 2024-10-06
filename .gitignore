@@ -1,0 +1,5 @@
+Backend/node_modules/
+Backend/config.env
+Backend/package-lock.json
+Backend/.gitignore
+Deployment/__pycache__/
