@@ -6,6 +6,7 @@ const {
   searchSubCategory,
   getAllSubCategories,
   updateSubCategory,
+  SetCategoryToBody,
 } = require("../services/subCategoryService");
 const {
   addSubCategoryVal,
@@ -15,11 +16,13 @@ const {
   updateSubCategoryVal,
 } = require("../utils/validators/subCategoryValidator");
 
-router = express.Router();
+// allow us to access parameters that comes from external routes that is linked to this route
+// we need to access Categoryid from category Router
+router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .post(addSubCategoryVal, addSubCategory)
+  .post(SetCategoryToBody, addSubCategoryVal, addSubCategory)
   .get(getAllSubCategories);
 
 router

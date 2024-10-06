@@ -6,7 +6,14 @@ const slugify = require("slugify");
 const ApiError = require("../utils/apiError");
 const { Result } = require("express-validator");
 
+const SetCategoryToBody = (req, res, next) => {
+  if (!req.body.category) req.body.category = req.params.categoryid;
+  next();
+};
+
 const addSubCategory = asyncHandler(async (req, res) => {
+  console.log(req.params);
+  console.log(req.body.name);
   const { name, category } = req.body;
   const subCategory = await subCategoryModel.create({
     name,
@@ -30,7 +37,9 @@ const deleteSubCategory = asyncHandler(async (req, res, next) => {
 
 const searchSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const subCategory = await subCategoryModel.findById(id);
+  const subCategory = await subCategoryModel
+    .findById(id)
+    .populate({ path: "category", select: "name -_id" });
   if (!subCategory) {
     return next(new ApiError(`No SubCategory found: ${id}`, 404));
   }
@@ -38,7 +47,13 @@ const searchSubCategory = asyncHandler(async (req, res, next) => {
 });
 
 const getAllSubCategories = asyncHandler(async (req, res, next) => {
-  const subCategories = await subCategoryModel.find().sort({ _id: -1 });
+  let filter = {};
+  if (req.params.categoryid) filter = { category: req.params.categoryid };
+
+  const subCategories = await subCategoryModel
+    .find(filter)
+    .sort({ _id: -1 })
+    .populate({ path: "category", select: "name -_id" });
   if (!subCategories) {
     return next(new ApiError(`No subcategories found`, 401));
   }
@@ -64,6 +79,7 @@ const updateSubCategory = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
+  SetCategoryToBody,
   addSubCategory,
   deleteSubCategory,
   searchSubCategory,
