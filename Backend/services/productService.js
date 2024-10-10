@@ -1,35 +1,30 @@
+const slugify = require("slugify");
 const productModel = require("../models/productModel");
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
-const homePage = (req, res) => {
-  res.send("<h1> Home Page </h1>");
-};
 
-const getAllProducts = (req, res) => {
-  productModel.find().then((result) => {
-    res.json({ data: result });
-  });
-  // .catch((err) => {
-  //   console.log(err);
-  // });
-};
+const getAllProducts = asyncHandler(async (req, res, next) => {
+  const page = req.query.page * 1 || 1;
+  const limit = req.query.limit * 1 || 5;
+  const skip = (page - 1) * limit;
 
-const addProduct = (req, res) => {
-  const name = req.body.name;
-  const price = req.body.price;
-  const product = new productModel({
-    Name: name,
-    Price: price,
-  });
+  products = await productModel
+    .find()
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate({ path: "category", select: "name" });
 
-  product.save().then((result) => {
-    res.json(result);
-  });
-  // .catch((err) => {
-  //   res.json(err);
-  //   console.log(err);
-  // });
-};
+  res.status(200).json({ results: products.length, page, data: products });
+});
+
+const addProduct = asyncHandler(async (req, res) => {
+  console.log("proudct add");
+  req.body.slug = slugify(req.body.Name);
+  const product = await productModel.create(req.body);
+
+  res.status(201).json({ data: product });
+});
 
 const searchProduct = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
@@ -42,4 +37,38 @@ const searchProduct = asyncHandler(async (req, res, next) => {
   res.status(200).json({ product: product });
 });
 
-module.exports = { getAllProducts, addProduct, homePage, searchProduct };
+const updateSpecificProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  if (req.body.Name) req.body.slug = slugify(req.body.Name);
+
+  const product = await productModel.findOneAndUpdate({ _id: id }, req.body, {
+    new: true,
+  });
+
+  if (!product) {
+    return next(new ApiError(`No category for this id ${id}`, 404));
+    // res
+    //   .status(404)
+    //   .json({ error: `This category doesn't exit to be updated: ${id}` });
+  }
+  res.status(200).json({ data: product });
+});
+
+const deleteProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await productModel.findByIdAndDelete(id);
+
+  if (!product) {
+    return next(new ApiError(`No category for this id ${id}`, 404));
+    // res.status(404).json({ data: `No category with id ${id}` });
+  }
+  res.status(204).json({ data: "category has been  deleteed" });
+});
+
+module.exports = {
+  getAllProducts,
+  addProduct,
+  searchProduct,
+  updateSpecificProduct,
+  deleteProduct,
+};

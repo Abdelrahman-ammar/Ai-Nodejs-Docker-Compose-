@@ -12,8 +12,6 @@ const SetCategoryToBody = (req, res, next) => {
 };
 
 const addSubCategory = asyncHandler(async (req, res) => {
-  console.log(req.params);
-  console.log(req.body.name);
   const { name, category } = req.body;
   const subCategory = await subCategoryModel.create({
     name,

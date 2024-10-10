@@ -12,7 +12,7 @@ const addCategoryVal = [
     .withMessage("Name is required")
     .isLength({ min: 3 })
     .withMessage("Name must be atleast 3 chars long")
-    .isLength({ max: 32 })
+    .isLength({ max: 150 })
     .withMessage("Too long category name"),
   validationMiddleware,
 ];

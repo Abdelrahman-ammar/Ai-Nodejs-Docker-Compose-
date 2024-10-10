@@ -7,6 +7,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const subCategoryRoutes = require("./routes/subCategoryRoute");
 const commentRoutes = require("./routes/toxicClassifyRoutes");
 const ApiError = require("./utils/apiError");
+const brandRoutes = require("./routes/brandRoutes");
 
 dotenv.config({ path: "config.env" });
 const globalError = require("./middlewares/globalMiddleWareError");
@@ -31,6 +32,7 @@ app.use("/productsApi/", proudctRoutes);
 app.use("/categoriesApi/", categoryRoutes);
 app.use("/subCategories/", subCategoryRoutes);
 app.use("/comments/", commentRoutes);
+app.use("/brandsApi/", brandRoutes);
 
 app.use("*", (req, res, next) => {
   // const err = new Error(`Can't Find this route ${req.original  Url}`);
