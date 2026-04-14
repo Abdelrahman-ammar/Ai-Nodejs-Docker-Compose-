@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="log.css">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="user singinBx">
+                <div class="imgBx"><img src="pexels-natasha-filippovskaya-4665688.jpg"></div>
+                <div class="formBx">
+                    <form method="POST" id="form1">
+                        <h1>log in</h1>
+                        <input type="text" placeholder="Username" id="unlogin">
+                        <p class="validation" id="valid">* Fill this field with valid data</p>
+                        <p class="max" id="valid3">* Minimum 8 character</p>
+                        <input type="password" placeholder="Password" id="psslogin">
+                        <p class="validation" id="valid2">* Fill this field with valid data</p>
+                        <input type="submit" value="Login" id="sublogin">
+                        <p class="signup">don't have an account ? <a href="#" onclick="toggleForm();">register</a></p> 
+                    </form>
+                </div>
+            </div>
+            <div class="user singupBx">
+                <div class="formBx">
+                    <form>
+                        <h1>create an account</h1>
+                        <input type="text" placeholder="Username">
+                        <input type="email" placeholder="@ Email Address">
+                        <input type="password" placeholder="Create Password">
+                        <input type="password" placeholder="Confirm Password">
+                        <input type="submit" value="Register">
+                        <p class="signup">already have an account ? <a href="#" onclick="toggleForm();">login</a></p> 
+                    </form>
+                </div>
+                <div class="imgBx"><img src="pexels-yurii-hlei-1545743.jpg"></div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        function toggleForm() {
+            var container = document.querySelector('.container');
+            container.classList.toggle('active');
+        }
+    </script>
+    <script src="log.js"></script>
+</body>
+</html>

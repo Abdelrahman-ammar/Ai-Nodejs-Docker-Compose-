@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: "config.env" });
 
-console.log("DB_URL:", process.env.DB_URL);
+// console.log("DB_URL:", process.env.DB_URL);
 
 const dbconnection = () => {
   mongoose.connect(process.env.DB_URL).then((res) => {

@@ -1,6 +1,7 @@
 const { check } = require("express-validator");
 const validationMiddleware = require("../../middlewares/validatorMiddleware");
 const categoryModel = require("../../models/categoryModel");
+const subCategoryModel = require("../../models/subCategoryModel");
 
 const getSpecificProductValidator = [
   check("id").isMongoId().withMessage("Invalid Product id"),
@@ -72,6 +73,7 @@ const addProductVal = [
     .optional()
     .isMongoId()
     .withMessage("Invalid Id format"),
+  // .custom(subcategories > {}),
 
   check("brand").optional().isMongoId().withMessage("Invalid Id format"),
 
